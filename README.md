@@ -2,49 +2,31 @@
 
 This repo teaches you—step by step—how to *see and measure* the difference between **CPU**, **Apple MPS (Metal)**, and **NVIDIA CUDA** for deep learning.
 
-> If you're on Apple Silicon: use the **MPS** path. CUDA requires an NVIDIA GPU (Colab/AWS/Paperspace/PC).
-
 ---
 
-## Quickstart (choose one)
+## 🚀 Quick Setup (Choose Your Platform)
 
-### 1) Google Colab (CUDA)
-1. Runtime → Change runtime type → **GPU**.
-2. Install CUDA wheels for PyTorch:
-   ```python
-   %pip install --upgrade pip
-   %pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-   %pip install matplotlib onnx onnxruntime
-   ```
-3. Run: `!python src/train.py --device cuda --epochs 1 --batch-size 128`
+Pick the setup guide for your environment:
 
-### 2) AWS g5/Paperspace (CUDA)
-```bash
-# NVIDIA container toolkit required; then build & run
-docker build -f env/Dockerfile.cuda -t cuda-tutorial .
-docker run --gpus all -it -p 8888:8888 -v $PWD:/workspace cuda-tutorial bash
+### 📱 [Google Colab Setup](SETUP_GOOGLE_COLAB.md)
+**Best for:** Free GPU access, no local setup required
+- ✅ Free NVIDIA GPU (T4, V100, or A100)
+- ✅ Pre-installed CUDA drivers
+- ✅ No installation needed
 
-# inside container
-python src/train.py --device cuda --epochs 1 --batch-size 128
-```
+### ☁️ [AWS / Paperspace Setup](SETUP_AWS_PAPERSPACE.md)
+**Best for:** Dedicated GPU instances, production workflows
+- ✅ Scalable GPU instances (g4dn, g5, p3, A100)
+- ✅ Docker support with NVIDIA Container Toolkit
+- ✅ Full CUDA and TensorRT support
 
-### 3) Mac (Apple Silicon, MPS)
-```bash
-python -m venv .venv && source .venv/bin/activate
-pip install --upgrade pip
-pip install torch torchvision torchaudio
-pip install matplotlib onnx onnxruntime
-python src/train.py --device mps --epochs 1 --batch-size 128
-```
+### 🍎 [Mac Local Setup (Apple Silicon)](SETUP_MAC_LOCAL.md)
+**Best for:** Learning on M1/M2/M3/M4 Macs
+- ✅ Apple MPS (Metal Performance Shaders) GPU acceleration
+- ✅ Local development environment
+- ✅ 2-6x speedup over CPU
 
----
-
-## Verify your accelerator
-```bash
-python -c "import torch; print('cuda?', torch.cuda.is_available()); print('mps?', getattr(torch.backends, 'mps', None) and torch.backends.mps.is_available()); print('device count', torch.cuda.device_count())"
-```
-
-CUDA: also run `nvidia-smi` and watch utilization during training.
+> **Note:** CUDA requires NVIDIA GPUs. For Mac users, we use MPS (Apple's GPU framework) instead.
 
 ---
 
@@ -71,10 +53,16 @@ make trt-benchmark      # CUDA + TensorRT only
 ---
 
 ## Troubleshooting
-- **CUDA mismatch**: ensure driver/CUDA version matches your PyTorch wheels.
-- **OOM (out of memory)**: lower `--batch-size` (e.g., 64 → 32 → 16).
-- **MPS not available**: update macOS + PyTorch; fall back to CPU.
-- **TensorRT missing**: skip TRT steps or use the Dockerfile.cuda image.
+
+For platform-specific issues, see the detailed troubleshooting sections in:
+- [Google Colab Troubleshooting](SETUP_GOOGLE_COLAB.md#troubleshooting)
+- [AWS/Paperspace Troubleshooting](SETUP_AWS_PAPERSPACE.md#troubleshooting)
+- [Mac Local Troubleshooting](SETUP_MAC_LOCAL.md#troubleshooting)
+
+**Common issues:**
+- **Out of memory (OOM)**: Lower `--batch-size` (e.g., 128 → 64 → 32 → 16)
+- **GPU not detected**: See platform-specific setup guides above
+- **Import errors**: Make sure virtual environment is activated
 
 ---
 
