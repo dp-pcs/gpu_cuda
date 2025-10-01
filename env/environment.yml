@@ -1,0 +1,16 @@
+name: cuda-tutorial
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pytorch-cuda=12.1
+  - pytorch
+  - torchvision
+  - torchaudio
+  - onnx
+  - onnxruntime-gpu
+  - pip
+  - pip:
+      - matplotlib
